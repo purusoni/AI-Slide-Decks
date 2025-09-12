@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental AI Dataset Analysis: The Performance Plateau Mystery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow: hidden;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 60px;
+            text-align: center;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        h3 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        p, li {
+            font-size: 1.4em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .success {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: linear-gradient(45deg, #fdcb6e, #e17055);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.2em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 1.2em;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #eee;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        .problem-indicator {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            z-index: 1;
+        }
+
+        .timeline-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 2;
+            position: relative;
+            flex: 1;
+            margin: 0 10px;
+            text-align: center;
+        }
+
+        .timeline-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .timeline-item p {
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .bar {
+            background: linear-gradient(to top, #667eea, #764ba2);
+            border-radius: 5px 5px 0 0;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .conclusion-box h3 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .conclusion-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .conclusion-box li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .conclusion-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .dataset-issues {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .dataset-issues h3 {
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
+
+        .issue-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .issue-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e17055;
+        }
+
+        .issue-item h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>The Performance Plateau Mystery</h1>
+            <h3>Why Advanced AI Models Hit a Wall at 33% mAP@.50-.95</h3>
+            <p style="font-size: 1.6em; margin-top: 40px;">
+                A Deep Dive into Dataset Quality Issues in Dental AI Research
+            </p>
+            <div style="margin-top: 50px;">
+                <span class="highlight">YOLO Hyperparameter Optimization</span> ➜ 
+                <span class="highlight">SSL + DINO-DETR</span> ➜ 
+                <span class="highlight">Extended Training</span> ➜ 
+                <span class="problem-indicator">Same Results</span>
+            </div>
+        </div>
+
+        <!-- Slide 2: The Problem Statement -->
+        <div class="slide">
+            <h2>The Stubborn Performance Ceiling</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value problem-indicator">33.9%</div>
+                    <div class="metric-label">YOLOv12x Baseline</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value problem-indicator">33.4%</div>
+                    <div class="metric-label">DINO-DETR + SSL (100 epochs)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value problem-indicator">-1.5%</div>
+                    <div class="metric-label">Performance Change</div>
+                </div>
+            </div>
+            <p style="font-size: 1.8em; margin-top: 40px;">
+                Despite <span class="highlight">revolutionary architectural advances</span> and 
+                <span class="highlight">extensive hyperparameter optimization</span>, 
+                mAP@.50-.95 remains stubbornly stuck around <span class="problem-indicator">33%</span>
+            </p>
+        </div>
+
+        <!-- Slide 3: Timeline of Efforts -->
+        <div class="slide">
+            <h2>Timeline of Optimization Efforts</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Phase 1</h4>
+                    <p><strong>YOLO Hyperparameter Tuning</strong></p>
+                    <p>Learning rates, augmentation, loss weights</p>
+                    <div class="metric-value problem-indicator" style="font-size: 1.5em;">~33%</div>
+                </div>
+                <div class="timeline-item">
+                    <h4>Phase 2</h4>
+                    <p><strong>SSL Pre-training</strong></p>
+                    <p>Hybrid contrastive learning, 94% loss reduction</p>
+                    <div class="metric-value problem-indicator" style="font-size: 1.5em;">~33%</div>
+                </div>
+                <div class="timeline-item">
+                    <h4>Phase 3</h4>
+                    <p><strong>DINO-DETR Integration</strong></p>
+                    <p>State-of-the-art detection head</p>
+                    <div class="metric-value problem-indicator" style="font-size: 1.5em;">~33%</div>
+                </div>
+                <div class="timeline-item">
+                    <h4>Phase 4</h4>
+                    <p><strong>Extended Training</strong></p>
+                    <p>100 epochs vs 50 epochs</p>
+                    <div class="metric-value problem-indicator" style="font-size: 1.5em;">~33%</div>
+                </div>
+            </div>
+            <p style="font-size: 1.5em; margin-top: 30px;">
+                <span class="warning">Pattern Recognition:</span> Advanced models, same results → <span class="highlight">Data Quality Issue</span>
+            </p>
+        </div>
+
+        <!-- Slide 4: Detailed Results Comparison -->
+        <div class="slide">
+            <h2>Comprehensive Results Analysis</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>mAP@.50-.95</th>
+                        <th>mAP@.50</th>
+                        <th>Training Time</th>
+                        <th>Model Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>YOLOv12x Baseline</strong></td>
+                        <td class="problem-indicator">33.9%</td>
+                        <td>70.0%</td>
+                        <td>~6 hours</td>
+                        <td>Standard CNN</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DINO-DETR (50 epochs)</strong></td>
+                        <td class="problem-indicator">33.9%</td>
+                        <td>70.0%</td>
+                        <td>6h 12m</td>
+                        <td>Transformer + SSL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DINO-DETR (100 epochs)</strong></td>
+                        <td class="problem-indicator">33.4%</td>
+                        <td>67.2%</td>
+                        <td>21h 26m</td>
+                        <td>Transformer + SSL</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 40px;">
+                <p style="font-size: 1.6em;">
+                    <span class="highlight">Key Insight:</span> 
+                    Models can detect objects (mAP@.50 ~70%) but struggle with precise localization (mAP@.50-.95 ~33%)
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Dataset Quality Hypothesis -->
+        <div class="slide">
+            <h2>The Dataset Quality Hypothesis</h2>
+            <div class="chart-container">
+                <h3>Performance vs Model Sophistication</h3>
+                <div class="bar-chart">
+                    <div class="bar" style="height: 150px;">
+                        <div class="bar-value">33.9%</div>
+                        <div class="bar-label">YOLO<br>Baseline</div>
+                    </div>
+                    <div class="bar" style="height: 152px;">
+                        <div class="bar-value">33.9%</div>
+                        <div class="bar-label">SSL<br>Pre-training</div>
+                    </div>
+                    <div class="bar" style="height: 151px;">
+                        <div class="bar-value">33.4%</div>
+                        <div class="bar-label">DINO-DETR<br>50 epochs</div>
+                    </div>
+                    <div class="bar" style="height: 149px;">
+                        <div class="bar-value">33.4%</div>
+                        <div class="bar-label">DINO-DETR<br>100 epochs</div>
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 1.8em; color: #e74c3c; font-weight: bold;">
+                Flat performance across dramatically different approaches = Data ceiling, not model ceiling
+            </p>
+        </div>
+
+        <!-- Slide 6: Suspected Dataset Issues -->
+        <div class="slide">
+            <h2>Suspected Dataset Quality Issues</h2>
+            <div class="dataset-issues">
+                <h3>Potential Problems Identified</h3>
+                <div class="issue-list">
+                    <div class="issue-item">
+                        <h4>🎯 Annotation Inconsistency</h4>
+                        <p>Bounding box precision varies between annotators</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>📏 Boundary Ambiguity</h4>
+                        <p>Unclear object boundaries for diffuse dental conditions</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>🏷️ Label Quality</h4>
+                        <p>Missing or incorrect category assignments</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>📊 Class Imbalance</h4>
+                        <p>Severe imbalance (Lesion: 0.98% vs Discoloration: 33.43%)</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>🔍 Image Quality</h4>
+                        <p>Inconsistent lighting, resolution, or imaging conditions</p>
+                    </div>
+                    <div class="issue-item">
+                        <h4>📋 Review Process</h4>
+                        <p>Dental team review never completed as planned</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: The mAP@.50 vs mAP@.50-.95 Gap -->
+        <div class="slide">
+            <h2>The Localization Precision Problem</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value success">~70%</div>
+                    <div class="metric-label">mAP@.50 (Detection)</div>
+                    <p style="margin-top: 15px;">Models can <strong>find</strong> dental pathologies</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value problem-indicator">~33%</div>
+                    <div class="metric-label">mAP@.50-.95 (Localization)</div>
+                    <p style="margin-top: 15px;">Models struggle to <strong>precisely locate</strong> them</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px; font-size: 1.6em;">
+                <p><span class="highlight">Gap Analysis:</span> 70% → 33% suggests annotation boundary issues</p>
+                <p style="margin-top: 20px;">
+                    <span class="warning">Hypothesis:</span> Ground truth bounding boxes may be imprecise, 
+                    preventing models from learning tight localization
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 8: The Missed Review Process -->
+        <div class="slide">
+            <h2>The Critical Missing Step</h2>
+            <div style="text-align: left; max-width: 800px; margin: 0 auto;">
+                <h3 style="color: #e74c3c; margin-bottom: 30px;">🚨 What Should Have Happened</h3>
+                <ul style="font-size: 1.4em; line-height: 2;">
+                    <li><strong>Dental Expert Review:</strong> Clinical validation of annotations</li>
+                    <li><strong>Boundary Verification:</strong> Precise pathology localization review</li>
+                    <li><strong>Label Consistency:</strong> Standardized annotation guidelines</li>
+                    <li><strong>Quality Assurance:</strong> Inter-annotator agreement analysis</li>
+                </ul>
+                
+                <h3 style="color: #e74c3c; margin: 40px 0 30px 0;">❌ What Actually Happened</h3>
+                <ul style="font-size: 1.4em; line-height: 2;">
+                    <li><strong>Review Never Completed:</strong> Dental team didn't follow through</li>
+                    <li><strong>Assumption of Quality:</strong> Proceeded with unvalidated dataset</li>
+                    <li><strong>Focus on Models:</strong> Invested in architecture instead of data</li>
+                    <li><strong>Delayed Recognition:</strong> Only now identifying the root cause</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Current Action Plan -->
+        <div class="slide">
+            <h2>Taking Action: Personal Dataset Review</h2>
+            <div class="conclusion-box">
+                <h3>🔍 Self-Directed Dataset Analysis Plan</h3>
+                <ul>
+                    <li><strong>Manual Annotation Review:</strong> Personally examine bounding box quality</li>
+                    <li><strong>Boundary Precision Analysis:</strong> Check for consistent object boundaries</li>
+                    <li><strong>Label Verification:</strong> Validate category assignments against images</li>
+                    <li><strong>Quality Metrics:</strong> Quantify annotation consistency and precision</li>
+                    <li><strong>Corrective Actions:</strong> Re-annotate problematic samples if needed</li>
+                    <li><strong>Validation Testing:</strong> Train on cleaned dataset to verify improvement</li>
+                </ul>
+            </div>
+            <p style="font-size: 1.6em; margin-top: 30px;">
+                <span class="success">Next Steps:</span> 
+                Complete personal dataset review → Generate cleaned dataset → Re-test model performance
+            </p>
+        </div>
+
+        <!-- Slide 10: Expected Outcomes -->
+        <div class="slide">
+            <h2>Expected Outcomes from Dataset Cleanup</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">📊</div>
+                    <div class="metric-label">Improved Annotation Quality</div>
+                    <p>Consistent, precise bounding boxes</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">🎯</div>
+                    <div class="metric-label">Better Localization</div>
+                    <p>Higher mAP@.50-.95 scores</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">⚖️</div>
+                    <div class="metric-label">Balanced Classes</div>
+                    <p>Address severe class imbalance</p>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">🚀</div>
+                    <div class="metric-label">Model Performance</div>
+                    <p>Finally break the 33% ceiling</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px;">
+                <p style="font-size: 1.8em;">
+                    <span class="highlight">Prediction:</span> 
+                    Clean dataset will unlock the potential of our advanced models
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Lessons Learned -->
+        <div class="slide">
+            <h2>Key Lessons for AI Research</h2>
+            <div style="text-align: left; max-width: 900px; margin: 0 auto;">
+                <div style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px;">
+                    <h3>🧠 Research Insights</h3>
+                    <ul style="font-size: 1.3em; line-height: 1.8;">
+                        <li><strong>Data First:</strong> Dataset quality often matters more than model sophistication</li>
+                        <li><strong>Plateau Patterns:</strong> Flat performance across methods indicates data ceiling</li>
+                        <li><strong>Review Processes:</strong> Domain expert validation is non-negotiable</li>
+                        <li><strong>Early Detection:</strong> Recognize data issues before extensive model development</li>
+                    </ul>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fd79a8, #e84393); color: white; padding: 30px; border-radius: 15px;">
+                    <h3>⚠️ Warning Signs</h3>
+                    <ul style="font-size: 1.3em; line-height: 1.8;">
+                        <li><strong>Consistent Underperformance:</strong> Multiple approaches yielding similar results</li>
+                        <li><strong>Detection vs Localization Gap:</strong> High mAP@.50, low mAP@.50-.95</li>
+                        <li><strong>Skipped Validation:</strong> Missing domain expert review processes</li>
+                        <li><strong>Assumption Trap:</strong> Assuming dataset quality without verification</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Conclusion -->
+        <div class="slide">
+            <h1>The Path Forward</h1>
+            <div style="font-size: 1.8em; line-height: 1.8; margin: 40px 0;">
+                <p>🔍 <strong>Root Cause Identified:</strong> Dataset quality, not model limitations</p>
+                <p>📋 <strong>Action Plan:</strong> Personal dataset review and cleanup</p>
+                <p>🎯 <strong>Expected Outcome:</strong> Breaking the 33% performance ceiling</p>
+                <p>🚀 <strong>Research Impact:</strong> Validating data-first approach to AI development</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 40px; border-radius: 20px; margin-top: 50px;">
+                <h3 style="color: white;">💡 Key Takeaway</h3>
+                <p style="font-size: 1.6em; margin: 0;">
+                    Sometimes the most sophisticated models can't overcome fundamental data quality issues. 
+                    When performance plateaus across multiple approaches, look at the data first.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">12</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="changeSlide(-1)">← Previous</button>
+        <button class="nav-btn" id="next-btn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            if (direction === 1 && currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            } else if (direction === -1 && currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                changeSlide(1);
+            } else if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+
+        // Auto-advance slides every 30 seconds (optional)
+        // setInterval(() => {
+        //     if (currentSlide < totalSlides - 1) {
+        //         changeSlide(1);
+        //     }
+        // }, 30000);
+    </script>
+</body>
+</html>
