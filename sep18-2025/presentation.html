@@ -185,8 +185,8 @@
                 <h2>2. The Problem: UI Layout Defects</h2>
                 <p>On Android, critical UI elements were overlapping with the system's status and navigation bars, creating a broken user experience. This was traced to incorrect `SafeAreaView` usage from the previous developer (Long) on a macOS environment.</p>
                 <div class="image-grid">
-                    <img src="app_bottom_bar_overlapping_navigation_area.png" alt="Bottom bar overlapping navigation area">
-                    <img src="navigation_area_transparent_and_overlapping_scanning_guideline_page_scan_button.png" alt="Scan button overlapping navigation area">
+                    <img src="images/app_bottom_bar_overlapping_navigation_area.png" alt="Bottom bar overlapping navigation area">
+                    <img src="images/navigation_area_transparent_and_overlapping_scanning_guideline_page_scan_button.png" alt="Scan button overlapping navigation area">
                 </div>
             </div>
         </section>
@@ -197,7 +197,7 @@
                 <h2>3. The Solution: System-Wide Audit</h2>
                 <p>A full-app audit was conducted to standardize UI components. We replaced the legacy `SafeAreaView` and removed all hardcoded padding, allowing the modern `react-native-safe-area-context` library to handle screen insets correctly.</p>
                  <div class="image-grid">
-                    <img src="fixed_report_screen.png" alt="Fixed report screen">
+                    <img src="images/fixed_report_screen.png" alt="Fixed report screen">
                 </div>
             </div>
         </section>
@@ -208,7 +208,7 @@
                 <h2>4. Stability Fix: Camera Functionality</h2>
                 <p>A major bug causing the camera to go black when flipped was resolved. The fix involved preventing the camera component from remounting unnecessarily, ensuring a smooth and reliable camera switching experience.</p>
                 <div class="image-grid">
-                    <img src="fixed_and_updated_camera_view.png" alt="Fixed camera view">
+                    <img src="images/fixed_and_updated_camera_view.png" alt="Fixed camera view">
                 </div>
             </div>
         </section>
