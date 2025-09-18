@@ -38,7 +38,7 @@ These platform-specific bugs were subtle and likely not apparent during the init
 **Initial State Example - Overlapping UI:**
 *The bottom navigation bar renders underneath the system's gesture navigation area, making it difficult to use.*
 
-<img src="app_bottom_bar_overlapping_navigation_area.png" height="500" />
+<img src="images/app_bottom_bar_overlapping_navigation_area.png" height="500" />
 
 ---
 
@@ -54,7 +54,7 @@ This audit covered the authentication flow, the main tab bar layout, and all det
 **Before and After - Scan Guidelines Screen:**
 *Previously, the "Start Scan" button was partially obscured by the navigation bar. This has been corrected.*
 
-<img src="navigation_area_transparent_and_overlapping_scanning_guideline_page_scan_button.png" height="500" />
+<img src="images/navigation_area_transparent_and_overlapping_scanning_guideline_page_scan_button.png" height="500" />
 
 ---
 
@@ -66,11 +66,11 @@ The audit and subsequent fixes have resolved all identified layout issues, creat
 **Additional Examples of Fixed UI:**
 *The "+" button was previously rendered incorrectly within the navigation area.*
 
-<img src="only_plus_button_box_overlapping_navigaition_area.png" height="500" />
+<img src="images/only_plus_button_box_overlapping_navigaition_area.png" height="500" />
 
 *The report screen is now properly inset, with all elements clearly visible and accessible.*
 
-<img src="fixed_report_screen.png" height="500" />
+<img src="images/fixed_report_screen.png" height="500" />
 
 #### 5.2. Camera Stability Enhancement
 A critical bug was identified where the camera view would go black after being flipped between the front and rear-facing modes. This issue was traced to the camera component being unnecessarily remounted on every state change.
@@ -80,7 +80,7 @@ A critical bug was identified where the camera view would go black after being f
 **Updated Camera View:**
 *The camera now functions correctly after implementing the stability fix.*
 
-<img src="fixed_and_updated_camera_view.png" height="500" />
+<img src="images/fixed_and_updated_camera_view.png" height="500" />
 
 ---
 
